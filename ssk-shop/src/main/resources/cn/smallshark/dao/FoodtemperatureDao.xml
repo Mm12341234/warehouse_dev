@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.FoodtemperatureDao">
+
+    <resultMap type="cn.smallshark.entity.FoodtemperatureEntity" id="foodtemperatureMap">
+        <result property="id" column="id"/>
+        <result property="foodid" column="foodId"/>
+        <result property="foodtemperature" column="foodTemperature"/>
+        <result property="temperaturetime" column="temperatureTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.FoodtemperatureEntity">
+		select
+			`id`,
+			`foodId`,
+			`foodTemperature`,
+			`temperatureTime`
+		from foodtemperature
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.FoodtemperatureEntity">
+		select
+    		`id`,
+    		`foodId`,
+    		`foodTemperature`,
+    		`temperatureTime`
+		from foodtemperature
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryTemperature" resultType="cn.smallshark.entity.FoodtemperatureEntity">
+		select
+		`id`,
+		`foodId`,
+		`foodTemperature`,
+		`temperatureTime`
+		from foodtemperature
+		WHERE 1=1 AND foodId=#{value}
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from foodtemperature
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="cn.smallshark.entity.FoodtemperatureEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into foodtemperature(
+			`foodId`,
+			`foodTemperature`,
+			`temperatureTime`)
+		values(
+			#{foodid},
+			#{foodtemperature},
+			#{temperaturetime})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.FoodtemperatureEntity">
+		update foodtemperature 
+		<set>
+			<if test="foodid != null">`foodId` = #{foodid}, </if>
+			<if test="foodtemperature != null">`foodTemperature` = #{foodtemperature}, </if>
+			<if test="temperaturetime != null">`temperatureTime` = #{temperaturetime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from foodtemperature where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from foodtemperature where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

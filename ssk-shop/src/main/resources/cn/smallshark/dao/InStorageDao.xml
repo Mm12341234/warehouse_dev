@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.InStorageDao">
+
+	<resultMap type="cn.smallshark.entity.InStorageEntity" id="inStorageMap">
+		<result property="id" column="id"/>
+		<result property="no" column="no"/>
+		<result property="customerId" column="customer_id"/>
+		<result property="categoryId" column="category_id"/>
+		<result property="num" column="num"/>
+		<result property="shelvesId" column="shelves_id"/>
+		<result property="shelvesNum" column="shelves_num"/>
+		<result property="inType" column="in_type"/>
+		<result property="checkId" column="check_id"/>
+	</resultMap>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.AutoInStorageEntity">
+		   select
+			in_storage.`id`,
+			in_storage.`no`,
+			in_storage.`customer_id`,
+			in_storage.`category_id`,
+			in_storage.`num`,
+			in_storage.`shelves_id`,
+			in_storage.`shelves_num`,
+			in_storage.`in_type`,
+			in_storage.`check_id`,
+			in_storage.`create_time`,
+			customer.`name` as customerName,
+			food_category.`name` as cateName,
+			examiner.`name` as checkName,
+            shelves.room_id as roomId,
+            shelves.warehouse_id as warehouseId
+		from in_storage
+		LEFT JOIN customer on customer.id=in_storage.customer_id
+		LEFT JOIN food_category on food_category.id=in_storage.category_id
+		LEFT JOIN examiner on examiner.id=in_storage.check_id
+        LEFT JOIN shelves on shelves.id=in_storage.shelves_id
+		WHERE 1=1
+		AND in_storage.in_type=1
+		AND in_storage.id = #{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.InStorageEntity">
+		select
+		in_storage.`id`,
+		in_storage.`no`,
+		in_storage.`customer_id`,
+		in_storage.`category_id`,
+		in_storage.`num`,
+		in_storage.`shelves_id`,
+		in_storage.`shelves_num`,
+		in_storage.`in_type`,
+		in_storage.`check_id`,
+		in_storage.`create_time`,
+		customer.`name` as customerName,
+		food_category.`name` as cateName,
+		examiner.`name` as checkName,
+		warehouse.`name` as warehouseName,
+		room.`name` as roomName,
+		shelves.`name` as shelvesName
+		from in_storage
+		LEFT JOIN customer on customer.id=in_storage.customer_id
+		LEFT JOIN food_category on food_category.id=in_storage.category_id
+		LEFT JOIN examiner on examiner.id=in_storage.check_id
+		LEFT JOIN shelves on in_storage.shelves_id=shelves.id
+		LEFT JOIN warehouse on warehouse.id=shelves.warehouse_id
+		LEFT JOIN room on room.id=shelves.room_id
+		WHERE 1=1 AND in_storage.in_type=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryTotal" resultType="int">
+		select count(*) from in_storage
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+	</select>
+
+	<insert id="save" parameterType="cn.smallshark.entity.InStorageEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into in_storage(
+			`no`,
+			`customer_id`,
+			`category_id`,
+			`num`,
+			`shelves_id`,
+			`shelves_num`,
+			`in_type`,
+			`create_time`,
+			`check_id`)
+		values(
+			#{no},
+			#{customerId},
+			#{categoryId},
+			#{num},
+			#{shelvesId},
+			#{shelvesNum},
+			#{inType},
+			#{createTime},
+			#{checkId})
+	</insert>
+
+	<update id="update" parameterType="cn.smallshark.entity.InStorageEntity">
+		update in_storage
+		<set>
+			<if test="no != null">`no` = #{no}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="categoryId != null">`category_id` = #{categoryId}, </if>
+			<if test="num != null">`num` = #{num}, </if>
+			<if test="shelvesId != null">`shelves_id` = #{shelvesId}, </if>
+			<if test="shelvesNum != null">`shelves_num` = #{shelvesNum}, </if>
+			<if test="inType != null">`in_type` = #{inType}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="checkId != null">`check_id` = #{checkId}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="delete">
+		delete from in_storage where id = #{value}
+	</delete>
+
+	<delete id="deleteBatch">
+		delete from in_storage where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

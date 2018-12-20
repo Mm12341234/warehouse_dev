@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.WarehouseDao">
+
+    <resultMap type="cn.smallshark.entity.WarehouseEntity" id="warehouseMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="country" column="country"/>
+        <result property="addressDetail" column="address_detail"/>
+        <result property="maxContent" column="max_content"/>
+        <result property="roomNum" column="room_num"/>
+        <result property="longitude" column="longitude"/>
+        <result property="dimension" column="dimension"/>
+        <result property="floor" column="floor"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.WarehouseEntity">
+		select
+			`id`,
+			`name`,
+			`province`,
+			`city`,
+			`country`,
+			`province_id`,
+			`city_id`,
+			`country_id`,
+			`address_detail`,
+			`max_content`,
+			`room_num`,
+			`longitude`,
+			`dimension`,
+			`floor`
+		from warehouse
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.WarehouseEntity">
+		select
+    		`id`,
+    		`name`,
+    		`province`,
+    		`city`,
+    		`country`,
+		    `province_id`,
+		    `city_id`,
+		    `country_id`,
+    		`address_detail`,
+    		`max_content`,
+    		`room_num`,
+    		`longitude`,
+    		`dimension`,
+    		`floor`
+		from warehouse
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryHouseAll" resultType="cn.smallshark.entity.WarehouseEntity">
+		select
+		`id`,
+		`name`,
+		`province`,
+		`city`,
+		`country`,
+		`province_id`,
+		`city_id`,
+		`country_id`,
+		`address_detail`,
+		`max_content`,
+		`room_num`,
+		`longitude`,
+		`dimension`,
+		`floor`
+		from warehouse
+		WHERE 1=1
+	</select>
+
+	<select id="queryWarehouseVo" resultType="cn.smallshark.entity.WarehouseVo">
+		select
+		`id`,
+		`name`
+		from warehouse
+		WHERE 1=1
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from warehouse
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="cn.smallshark.entity.WarehouseEntity">
+		insert into warehouse(
+			`name`,
+			`province`,
+			`city`,
+			`country`,
+			`province_id`,
+			`city_id`,
+			`country_id`,
+			`address_detail`,
+			`max_content`,
+			`room_num`,
+			`longitude`,
+			`dimension`,
+			`floor`)
+		values(
+			#{name},
+			#{province},
+			#{city},
+			#{country},
+			#{provinceId},
+			#{cityId},
+			#{countryId},
+			#{addressDetail},
+			#{maxContent},
+			#{roomNum},
+			#{longitude},
+			#{dimension},
+			#{floor})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.WarehouseEntity">
+		update warehouse 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="province != null">`province` = #{province}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="country != null">`country` = #{country}, </if>
+			<if test="provinceId != null">`province_id` = #{provinceId}, </if>
+			<if test="city != null">`city_id` = #{cityId}, </if>
+			<if test="country != null">`country_id` = #{countryId}, </if>
+			<if test="addressDetail != null">`address_detail` = #{addressDetail}, </if>
+			<if test="maxContent != null">`max_content` = #{maxContent}, </if>
+			<if test="roomNum != null">`room_num` = #{roomNum}, </if>
+			<if test="longitude != null">`longitude` = #{longitude}, </if>
+			<if test="dimension != null">`dimension` = #{dimension}, </if>
+			<if test="floor != null">`floor` = #{floor}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from warehouse where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from warehouse where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

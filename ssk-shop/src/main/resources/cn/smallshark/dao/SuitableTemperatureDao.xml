@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.SuitableTemperatureDao">
+
+    <resultMap type="cn.smallshark.entity.SuitableTemperatureEntity" id="suitableTemperatureMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="minTemperature" column="min_temperature"/>
+        <result property="maxTemperature" column="max_temperature"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.SuitableTemperatureEntity">
+		select
+			`id`,
+			`name`,
+			`category_id`,
+			`min_temperature`,
+			`max_temperature`,
+			`remark`
+		from suitable_temperature
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.SuitableTemperatureEntity">
+		select
+    		`id`,
+    		`name`,
+    		`category_id`,
+    		`min_temperature`,
+    		`max_temperature`,
+    		`remark`
+		from suitable_temperature
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from suitable_temperature
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="cn.smallshark.entity.SuitableTemperatureEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into suitable_temperature(
+			`name`,
+			`category_id`,
+			`min_temperature`,
+			`max_temperature`,
+			`remark`)
+		values(
+			#{name},
+			#{categoryId},
+			#{minTemperature},
+			#{maxTemperature},
+			#{remark})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.SuitableTemperatureEntity">
+		update suitable_temperature 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="categoryId != null">`category_id` = #{categoryId}, </if>
+			<if test="minTemperature != null">`min_temperature` = #{minTemperature}, </if>
+			<if test="maxTemperature != null">`max_temperature` = #{maxTemperature}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from suitable_temperature where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from suitable_temperature where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

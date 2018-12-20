@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.ShelvesDao">
+
+    <resultMap type="cn.smallshark.entity.ShelvesEntity" id="shelvesMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="addressDetail" column="address_detail"/>
+        <result property="maxContent" column="max_content"/>
+        <result property="roomId" column="room_id"/>
+        <result property="floor" column="floor"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.ShelvesEntity">
+		select
+			`id`,
+			`name`,
+			`address_detail`,
+			`max_content`,
+			`room_id`,
+			`warehouse_id` as ware_id,
+			`floor`
+		from shelves
+		where id = #{id}
+	</select>
+
+	<select id="queryShelvesVo" resultType="cn.smallshark.entity.ShelvesVo">
+		select
+		    `id`,
+			`name`
+		from shelves
+        where room_id=#{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.ShelvesEntity">
+		select
+			shelves.`id`,
+			shelves.`name`,
+			shelves.`address_detail`,
+			shelves.`max_content`,
+			shelves.`room_id`,
+		    shelves.`warehouse_id` as ware_id,
+			shelves.`floor`,
+			room.`name` as room_name,
+			warehouse.`name` as warehouse_name
+		from shelves
+		LEFT JOIN room on room.id=shelves.room_id
+		LEFT JOIN warehouse on warehouse.id=room.warehouse_id
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from shelves
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="cn.smallshark.entity.ShelvesEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into shelves(
+			`name`,
+			`address_detail`,
+			`max_content`,
+			`room_id`,
+			`warehouse_id`,
+			`floor`)
+		values(
+			#{name},
+			#{addressDetail},
+			#{maxContent},
+			#{roomId},
+			#{wareId},
+			#{floor})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.ShelvesEntity">
+		update shelves 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="addressDetail != null">`address_detail` = #{addressDetail}, </if>
+			<if test="maxContent != null">`max_content` = #{maxContent}, </if>
+			<if test="roomId != null">`room_id` = #{roomId}, </if>
+			<if test="wareId != null">`warehouse_id` = #{wareId}, </if>
+			<if test="floor != null">`floor` = #{floor}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from shelves where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from shelves where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

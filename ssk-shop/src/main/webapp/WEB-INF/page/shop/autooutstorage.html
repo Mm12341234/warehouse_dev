@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+        <Row :gutter="16">
+            <div class="search-group">
+                <i-col span="4">
+                    <i-input v-model="q.name" @on-enter="query" placeholder="名称"/>
+                </i-col>
+                <i-button @click="query">查询</i-button>
+                <i-button @click="reloadSearch">重置</i-button>
+            </div>
+            <div class="buttons-group">
+                #if($shiro.hasPermission("outstorage:save"))
+                <i-button type="info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</i-button>
+                #end
+                #if($shiro.hasPermission("outstorage:update"))
+                <i-button type="warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</i-button>
+                #end
+                #if($shiro.hasPermission("outstorage:delete"))
+                <i-button type="error" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</i-button>
+                #end
+                <i-button type="default" @click="excelExport">导出数据</i-button>
+            </div>
+        </Row>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+
+    <Card v-show="!showList">
+        <p slot="title">{{title}}</p>
+		<i-form ref="formValidate" :model="outStorage" :rules="ruleValidate" :label-width="80">
+            <Form-item label="交易单编号" prop="no">
+                <i-input v-model="outStorage.no" placeholder="交易单编号"/>
+            </Form-item>
+            <Form-item label="客户">
+                <i-select v-model="outStorage.customerId" style="width:200px" @on-change="queryCustomer('1')">
+                    <i-option v-for="item in customerlist" :value="item.id" :key="item.id">{{ item.name }}</i-option>
+                </i-select>
+            </Form-item>
+            <Form-item label="分类">
+                <i-select v-model="outStorage.categoryId" style="width:200px" @on-change="queryCategory('1')">
+                    <i-option v-for="item in catelist" :value="item.id" :key="item.id">{{ item.name }}</i-option>
+                </i-select>
+            </Form-item>
+            <Form-item label="数量" prop="num">
+                <i-input v-model="outStorage.num" placeholder="数量"/>
+            </Form-item>
+            <Form-item label="货架的id" prop="shelvesId">
+                <i-input v-model="outStorage.shelvesId" placeholder="货架的id"/>
+            </Form-item>
+            <Form-item label="货架的层数" prop="shelvesNum">
+                <i-input v-model="outStorage.shelvesNum" placeholder="货架的层数"/>
+            </Form-item>
+            <Form-item label="boolean，0：代表自动，1：代表手动" prop="inType">
+                <i-input v-model="outStorage.inType" placeholder="boolean，0：代表自动，1：代表手动"/>
+            </Form-item>
+            <Form-item  label="审核员">
+                <i-select v-model="outStorage.checkId" style="width:200px" @on-change="queryCheck('1')">
+                    <i-option v-for="item in examinerlist" :value="item.id" :key="item.id">{{ item.name }}</i-option>
+                </i-select>
+            </Form-item>
+            <Form-item label="int，0：代表正常，1：代表腐损" prop="isNormal">
+                <i-input v-model="outStorage.isNormal" placeholder="int，0：代表正常，1：代表腐损"/>
+            </Form-item>
+            <Form-item label="" prop="finishTime">
+                <i-input v-model="outStorage.finishTime" placeholder=""/>
+            </Form-item>
+            <Form-item>
+                <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>
+                <i-button type="warning" @click="reload" style="margin-left: 8px"/>返回</i-button>
+                <i-button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">重置</i-button>
+            </Form-item>
+        </i-form>
+	</Card>
+</div>
+
+<script src="${rc.contextPath}/js/shop/autooutstorage.js?_${date.systemTime}"></script>
+</body>
+</html>

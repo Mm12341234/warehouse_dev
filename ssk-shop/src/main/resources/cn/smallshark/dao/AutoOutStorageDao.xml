@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.AutoOutStorageDao">
+
+    <resultMap type="cn.smallshark.entity.AutoOutStorageEntity" id="outStorageMap">
+        <result property="id" column="id"/>
+        <result property="no" column="no"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="num" column="num"/>
+        <result property="shelvesId" column="shelves_id"/>
+        <result property="shelvesNum" column="shelves_num"/>
+        <result property="inType" column="in_type"/>
+        <result property="checkId" column="check_id"/>
+        <result property="isNormal" column="is_normal"/>
+        <result property="finishTime" column="finish_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.AutoOutStorageEntity">
+		select
+			`id`,
+			`no`,
+			`customer_id`,
+			`category_id`,
+			`num`,
+			`shelves_id`,
+			`shelves_num`,
+			`in_type`,
+			`check_id`,
+			`is_normal`,
+			`finish_time`
+		from out_storage
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.AutoOutStorageEntity">
+		select
+			out_storage.`id`,
+			out_storage.`no`,
+			out_storage.`customer_id`,
+			out_storage.`category_id`,
+			out_storage.`num`,
+			out_storage.`shelves_id`,
+			out_storage.`shelves_num`,
+			out_storage.`in_type`,
+			out_storage.`check_id`,
+			out_storage.`is_normal`,
+			out_storage.`finish_time`,
+			customer.`name` as customerName,
+			examiner.`name` as examinerName,
+			food_category.`name` as cateName
+		from out_storage
+		LEFT JOIN customer on customer.id=out_storage.customer_id
+		LEFT JOIN examiner on examiner.id=out_storage.check_id
+		LEFT JOIN food_category on food_category.id=out_storage.category_id
+		WHERE 1=1 AND out_storage.in_type=0
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from out_storage
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="cn.smallshark.entity.AutoOutStorageEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into out_storage(
+			`no`,
+			`customer_id`,
+			`category_id`,
+			`num`,
+			`shelves_id`,
+			`shelves_num`,
+			`in_type`,
+			`check_id`,
+			`is_normal`,
+			`finish_time`)
+		values(
+			#{no},
+			#{customerId},
+			#{categoryId},
+			#{num},
+			#{shelvesId},
+			#{shelvesNum},
+			#{inType},
+			#{checkId},
+			#{isNormal},
+			#{finishTime})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.AutoOutStorageEntity">
+		update out_storage 
+		<set>
+			<if test="no != null">`no` = #{no}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="categoryId != null">`category_id` = #{categoryId}, </if>
+			<if test="num != null">`num` = #{num}, </if>
+			<if test="shelvesId != null">`shelves_id` = #{shelvesId}, </if>
+			<if test="shelvesNum != null">`shelves_num` = #{shelvesNum}, </if>
+			<if test="inType != null">`in_type` = #{inType}, </if>
+			<if test="checkId != null">`check_id` = #{checkId}, </if>
+			<if test="isNormal != null">`is_normal` = #{isNormal}, </if>
+			<if test="finishTime != null">`finish_time` = #{finishTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from out_storage where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from out_storage where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

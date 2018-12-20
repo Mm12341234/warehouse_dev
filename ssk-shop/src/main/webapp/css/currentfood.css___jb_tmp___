@@ -1,0 +1,105 @@
+/*<!--温度面板界面划分-->*/
+#left{
+    /*border:1px solid red;*/
+    width:70%;
+    float:left;
+}
+#right{
+    /*border:1px solid green;*/
+    width:25%;
+    float:right;
+}
+
+/*温度预警信息*/
+.label-important, .badge-important {
+    background: #f74d4d;
+}
+
+/*Metro Background color class*/
+
+.remind_normal {
+    background: #28b779;
+}
+
+.remind_warming {
+    background: #2255a4;
+}
+
+.remind_abnormal {
+    background: #da542e;
+}
+
+
+
+.remind,.warming{
+    display: block;
+    list-style: none outside none;
+    margin: 12px 0;
+    text-align: center;
+}
+
+
+#right .remind li {
+    position: relative;
+    width:33%;
+}
+#right .warming li {
+    position: relative;
+    width:68%;
+}
+/*#right .remind_warming{*/
+/*display:block;*/
+/*}*/
+/*#right .remind_normal,#right .remind_abnormal{*/
+/*position: relative;*/
+/*width:30%;*/
+/*}*/
+
+/*报警信息的条数*/
+#right .warming li .label {
+    position: absolute;
+    padding: 5px;
+    top: -10px;
+    right: -5px;
+    background-color:red;
+    color:#fff;
+}
+
+.remind li,.warming li{
+    float: left;
+    line-height: 20px;
+    margin: 0 15px 15px 0px;
+}
+.remind li a:hover, .remind li:hover,.warming li a:hover,.warming li:hover{
+    background: #2E363F;
+    text-decoration:none;
+}
+
+
+
+#right .remind .span3 {
+    width: 30%;
+}
+/*设置a*/
+.remind li a,.warming li a {
+    color: #000000;
+}
+
+.remind li a,.warming li a{
+    /*display: block;*/
+    color: #fff;
+    font-size: 14px;
+    /*font-weight: lighter;*/
+}
+/*改变小图标的位置*/
+.remind li a i[class^="fa"], .warming li a i[class^="fa"],.remind li a span[class^="glyphicon"]{
+    font-size: 30px;
+    margin: 0 auto 5px;
+    margin-top:10px;
+}
+
+/*标题的设置*/
+.title{
+    /*border:1px solid red;*/
+    margin-left:30px;
+}

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.ExaminerDao">
+
+    <resultMap type="cn.smallshark.entity.ExaminerEntity" id="examinerMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="phone" column="phone"/>
+        <result property="provinceId" column="province_id"/>
+        <result property="province" column="province"/>
+        <result property="cityId" column="city_id"/>
+        <result property="city" column="city"/>
+        <result property="countryId" column="country_id"/>
+        <result property="country" column="country"/>
+        <result property="addressDetail" column="address_detail"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.ExaminerEntity">
+		select
+			`id`,
+			`name`,
+			`sex`,
+			`phone`,
+			`province_id`,
+			`province`,
+			`city_id`,
+			`city`,
+			`country_id`,
+			`country`,
+			`address_detail`
+		from examiner
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.ExaminerEntity">
+		select
+    		`id`,
+    		`name`,
+    		`sex`,
+    		`phone`,
+    		`province_id`,
+    		`province`,
+    		`city_id`,
+    		`city`,
+    		`country_id`,
+    		`country`,
+    		`address_detail`
+		from examiner
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from examiner
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="cn.smallshark.entity.ExaminerEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into examiner(
+			`name`,
+			`sex`,
+			`phone`,
+			`province_id`,
+			`province`,
+			`city_id`,
+			`city`,
+			`country_id`,
+			`country`,
+			`address_detail`)
+		values(
+			#{name},
+			#{sex},
+			#{phone},
+			#{provinceId},
+			#{province},
+			#{cityId},
+			#{city},
+			#{countryId},
+			#{country},
+			#{addressDetail})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.ExaminerEntity">
+		update examiner 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="provinceId != null">`province_id` = #{provinceId}, </if>
+			<if test="province != null">`province` = #{province}, </if>
+			<if test="cityId != null">`city_id` = #{cityId}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="countryId != null">`country_id` = #{countryId}, </if>
+			<if test="country != null">`country` = #{country}, </if>
+			<if test="addressDetail != null">`address_detail` = #{addressDetail}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from examiner where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from examiner where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

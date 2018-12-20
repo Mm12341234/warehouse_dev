@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.RoomDao">
+
+    <resultMap type="cn.smallshark.entity.RoomEntity" id="roomMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="addressDetail" column="address_detail"/>
+        <result property="maxContent" column="max_content"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="floorNum" column="floor_num"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.RoomEntity">
+		select
+			 room.id,
+			 room.name,
+			 room.address_detail,
+			 room.max_content,
+			 room.warehouse_id,
+			 room.floor_num,
+             warehouse.name as warehouseName,
+             CONCAT(warehouse.province,warehouse.city,warehouse.country,warehouse.address_detail) as warehouseAddress
+		from room
+        left join warehouse
+        on room.warehouse_id=warehouse.id
+		where room.id = #{id}
+	</select>
+
+	<select id="queryRoomVo" resultType="cn.smallshark.entity.RoomVo">
+		select
+			 room.id,
+			 room.name
+		from room
+		where warehouse_id = #{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.RoomEntity">
+		select
+		   room.id,
+		   room.name,
+		   room.address_detail,
+		   room.max_content,
+		   room.warehouse_id,
+		   room.floor_num,
+		   warehouse.name as warehouseName,
+		   CONCAT(warehouse.province,warehouse.city,warehouse.country,warehouse.address_detail) as warehouseAddress
+		from room
+		left join warehouse on room.warehouse_id=warehouse.id
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+		<if test="warehouse != null">
+			AND warehouse_id=#{warehouse}
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from room
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="cn.smallshark.entity.RoomEntity">
+		insert into room(
+			`id`,
+			`name`,
+			`address_detail`,
+			`max_content`,
+			`warehouse_id`,
+			`floor_num`)
+		values(
+			#{id},
+			#{name},
+			#{addressDetail},
+			#{maxContent},
+			#{warehouseId},
+			#{floorNum})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.RoomEntity">
+		update room 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="addressDetail != null">`address_detail` = #{addressDetail}, </if>
+			<if test="maxContent != null">`max_content` = #{maxContent}, </if>
+			<if test="warehouseId != null">`warehouse_id` = #{warehouseId}, </if>
+			<if test="floorNum != null">`floor_num` = #{floorNum}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from room where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from room where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
