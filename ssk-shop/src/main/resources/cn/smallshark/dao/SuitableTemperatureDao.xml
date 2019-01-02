@@ -21,7 +21,7 @@
 			`max_temperature`,
 			`remark`
 		from suitable_temperature
-		where id = #{id}
+		where category_id = #{id}
 	</select>
 
 	<select id="queryList" resultType="cn.smallshark.entity.SuitableTemperatureEntity">

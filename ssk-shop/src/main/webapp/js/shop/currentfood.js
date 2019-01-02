@@ -167,7 +167,7 @@ let vm = new Vue({
 			vm.showListTwo=false;
 			vm1.showBtn=true;
 			$('#showListThree').show();
-            Start();
+            Start(id);
 		}
 	}
 });

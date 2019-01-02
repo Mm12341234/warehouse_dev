@@ -14,4 +14,6 @@ import java.util.List;
 public interface FoodtemperatureDao extends BaseDao<FoodtemperatureEntity> {
 
     List<FoodtemperatureEntity> queryTemperature(Integer id);
+
+    FoodtemperatureEntity queryNewFoodTemperatureById(Integer id);
 }

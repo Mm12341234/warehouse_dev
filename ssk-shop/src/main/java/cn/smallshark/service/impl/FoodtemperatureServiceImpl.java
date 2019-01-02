@@ -25,6 +25,11 @@ public class FoodtemperatureServiceImpl implements FoodtemperatureService {
     private FoodtemperatureDao foodtemperatureDao;
 
     @Override
+    public FoodtemperatureEntity queryNewFoodTemperatureById(Integer id) {
+        return foodtemperatureDao.queryNewFoodTemperatureById(id);
+    }
+
+    @Override
     public FoodtemperatureEntity queryObject(Integer id) {
         return foodtemperatureDao.queryObject(id);
     }
@@ -73,12 +78,11 @@ public class FoodtemperatureServiceImpl implements FoodtemperatureService {
         //模拟读取温度，向数据库插入数据
         Random rand = new Random();
         Integer foodId=rand.nextInt(20);
-        Integer temperature=rand.nextInt(18);
+        Double temperature=rand.nextDouble() * 10;
         FoodtemperatureEntity foodtemperature=new FoodtemperatureEntity();
         foodtemperature.setFoodid(foodId);
         foodtemperature.setFoodtemperature(temperature);
         foodtemperature.setTemperaturetime(new Date());
         foodtemperatureDao.save(foodtemperature);
-
     }
 }

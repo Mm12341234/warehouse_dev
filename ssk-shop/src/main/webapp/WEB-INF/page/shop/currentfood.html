@@ -2,8 +2,10 @@
 <html>
 <head>
     <title></title>
-    <link rel="stylesheet" href="../../../css/currentfood.css">
-    <script src="../../../echarts/echarts.js"></script>
+   <!-- <link rel="stylesheet" href="../../../css/currentfood.css">-->
+    <link rel="stylesheet" href="${rc.contextPath}/css/currentfood.css">
+    <!--<script src="../../../echarts/echarts.js"></script>-->
+    <script src="${rc.contextPath}/echarts/echarts.js?_${date.systemTime}"></script>
     #parse("sys/header.html")
 </head>
 <body>
@@ -93,7 +95,7 @@
         <i-button type="info" style="margin-left:500px; width:300px;" @click="setReturn()">返回</i-button>
     </div>
 </div>
-<script src="${rc.contextPath}/js/shop/temperature.js?_${date.systemTime}"></script>
 <script src="${rc.contextPath}/js/shop/currentfood.js?_${date.systemTime}"></script>
+<script src="${rc.contextPath}/js/shop/temperature.js?_${date.systemTime}"></script>
 </body>
 </html>

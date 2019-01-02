@@ -2,6 +2,7 @@ var myChart = echarts.init(document.getElementById('left'));
 var names=[];    //类别数组（实际用来盛放X轴坐标值）
 var nums=[];    //销量数组（实际用来盛放Y坐标值）
 var itemID;
+var foodId;
 
 //页面加载后，进行温度折线图加载
 $(function(){
@@ -9,13 +10,29 @@ $(function(){
 })
 
 //开始加载
-function Start(){
-    getTemperatureMap();
-    getNewFoodTemperature();
+function Start(id){
+    getTemperatureMap(id);
+    getNewFoodTemperature(id);
+}
+
+//获取主机地址+项目名
+function getRealPath(){
+    //获取当前网址，如： http://localhost:8083/myproj/view/my.jsp
+        var curWwwPath=window.document.location.href;
+    //获取主机地址之后的目录，如： myproj/view/my.jsp
+        var pathName=window.document.location.pathname;
+        var pos=curWwwPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:8083
+        var localhostPaht=curWwwPath.substring(0,pos);
+    //获取带"/"的项目名，如：/myproj
+        var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+    //得到了 http://localhost:8083/myproj
+        var realPath=localhostPaht+projectName;
+    return realPath;
 }
 
 //获取前十分钟的温度折线图
-function getTemperatureMap(){
+function getTemperatureMap(id){
     myChart.setOption({
         title: {
             text: '温度变化图',
@@ -62,12 +79,14 @@ function getTemperatureMap(){
         }]
     });
     myChart.showLoading();    //数据加载完之前先显示一段简单的loading动画
-
+    var rootUrl = getRealPath();
+    var url = rootUrl +  "/foodtemperature/queryTemperature1/" + id;
+    console.log(url);
     $.ajax({
         // type : "post",
-        async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-        url : "/foodtemperature/queryTemperature/"+2,    //请求发送到TestServlet处
-        dataType : "json",        //返回数据形式为json
+        async : true,               //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url : url,                  //请求发送到TestServlet处
+        dataType : "json",          //返回数据形式为json
         success : function(result) {
             result=result.list;
             //请求成功时执行该函数内容，result即为服务器返回的json对象
@@ -115,13 +134,17 @@ function getTemperatureMap(){
 }
 
 //获取最新温度折线图
-function getNewFoodTemperature(){
+function getNewFoodTemperature(id){
+    //请求路径
+    foodId = id;
+    var rootUrl = getRealPath();
+    var url = rootUrl + "/foodtemperature/getNewTemperature/" + foodId;
     $.ajax({
         async: true,
-        url : "/foodtemperature/queryTemperature/"+2,
+        url : url,
         dataType : "json",
         success : function (result) {
-            result=result.list;
+           //console.log(result);
             if (result) {
                 //获取返回的时间，并转换时间格式
                 var time = new Date(result.temperaturetime);
@@ -166,7 +189,7 @@ function getNewFoodTemperature(){
     });
 
     //定时器循环执行
-    itemID=setTimeout("getNewFoodTemperature();", 10000);
+    itemID=setTimeout("getNewFoodTemperature(foodId);", 10000);
 }
 
 //移动数组元素，更新温度数组和时间数组（去除第一个数组元素，加入最后一个数组元素）

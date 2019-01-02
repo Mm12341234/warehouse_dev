@@ -17,13 +17,13 @@ import java.util.Date;
 public class FoodtemperatureEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    //
+    // 主键
     private Integer id;
-    //
+    // 食品id
     private Integer foodid;
-    //
-    private Integer foodtemperature;
-    //
+    // 食品温度
+    private Double foodtemperature;
+    // 当前温度时间点
     private Date temperaturetime;
 
 }

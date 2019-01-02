@@ -279,6 +279,11 @@
             <artifactId>j2cache-core</artifactId>
             <version>${j2cache.version}</version>
         </dependency>
+        <!--email依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

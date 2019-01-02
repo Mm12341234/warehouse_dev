@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.WarnDao">
+
+    <resultMap type="cn.smallshark.entity.WarnEntity" id="warnMap">
+        <result property="id" column="id"/>
+        <result property="currentFoodId" column="current_food_id"/>
+        <result property="type" column="type"/>
+        <result property="shelvesId" column="shelves_id"/>
+        <result property="roomId" column="room_id"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="time" column="time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<insert id="save" parameterType="cn.smallshark.entity.WarnEntity">
+		insert into warm(
+            `id`,
+			`current_food_id`,
+			`type`,
+			`shelves_id`,
+			`room_id`,
+			`warehouse_id`,
+			`time`,
+			`remark`
+			)
+		values(
+		    #{id},
+			#{currentFoodId},
+			#{type},
+			#{shelvesId},
+			#{roomId},
+			#{warehouseId},
+			#{time},
+			#{remark})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.WarehouseEntity">
+		update warehouse 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="province != null">`province` = #{province}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="country != null">`country` = #{country}, </if>
+			<if test="provinceId != null">`province_id` = #{provinceId}, </if>
+			<if test="city != null">`city_id` = #{cityId}, </if>
+			<if test="country != null">`country_id` = #{countryId}, </if>
+			<if test="addressDetail != null">`address_detail` = #{addressDetail}, </if>
+			<if test="maxContent != null">`max_content` = #{maxContent}, </if>
+			<if test="roomNum != null">`room_num` = #{roomNum}, </if>
+			<if test="longitude != null">`longitude` = #{longitude}, </if>
+			<if test="dimension != null">`dimension` = #{dimension}, </if>
+			<if test="floor != null">`floor` = #{floor}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from warehouse where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from warehouse where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

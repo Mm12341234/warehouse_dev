@@ -3,12 +3,25 @@
 
 <mapper namespace="cn.smallshark.dao.FoodtemperatureDao">
 
+
     <resultMap type="cn.smallshark.entity.FoodtemperatureEntity" id="foodtemperatureMap">
         <result property="id" column="id"/>
         <result property="foodid" column="foodId"/>
         <result property="foodtemperature" column="foodTemperature"/>
         <result property="temperaturetime" column="temperatureTime"/>
     </resultMap>
+
+	<select id="queryNewFoodTemperatureById" resultType="cn.smallshark.entity.FoodtemperatureEntity">
+		select
+		    `id`,
+			`foodId`,
+			`foodTemperature`,
+			`temperatureTime`
+		from foodtemperature
+		where foodId=#{id}
+		order by temperatureTime DESC
+		limit 1
+	</select>
 
 	<select id="queryObject" resultType="cn.smallshark.entity.FoodtemperatureEntity">
 		select

@@ -15,6 +15,14 @@ import java.util.Map;
 public interface FoodtemperatureService {
 
     /**
+     * 根据Id获取该食品当前最新的温度情况
+     * @Author carvin
+     * @date 2018.12.25
+     * @return
+     */
+    FoodtemperatureEntity queryNewFoodTemperatureById(Integer id);
+
+    /**
      * 根据主键查询实体
      *
      * @param id 主键
