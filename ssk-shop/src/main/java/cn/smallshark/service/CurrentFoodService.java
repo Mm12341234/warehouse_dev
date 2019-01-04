@@ -1,6 +1,7 @@
 package cn.smallshark.service;
 
 import cn.smallshark.entity.CurrentFoodEntity;
+import cn.smallshark.entity.StorageItemEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,11 @@ public interface CurrentFoodService {
     int save(CurrentFoodEntity currentFood);
 
     /**
+     * 入库事务
+     */
+    int inStorage(CurrentFoodEntity currentFood, StorageItemEntity storageItem);
+
+    /**
      * 根据主键更新实体
      *
      * @param currentFood 实体
@@ -69,4 +75,9 @@ public interface CurrentFoodService {
      * @return 删除条数
      */
     int deleteBatch(Integer[] ids);
+
+    /**
+     *  出库的事务处理
+     */
+    int outStorage(CurrentFoodEntity currentFood, StorageItemEntity storageItem);
 }

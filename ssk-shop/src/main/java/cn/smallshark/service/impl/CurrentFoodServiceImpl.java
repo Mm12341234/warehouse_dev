@@ -1,5 +1,7 @@
 package cn.smallshark.service.impl;
 
+import cn.smallshark.dao.StorageItemDao;
+import cn.smallshark.entity.StorageItemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import java.util.Map;
 import cn.smallshark.dao.CurrentFoodDao;
 import cn.smallshark.entity.CurrentFoodEntity;
 import cn.smallshark.service.CurrentFoodService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service实现类
@@ -21,6 +24,8 @@ import cn.smallshark.service.CurrentFoodService;
 public class CurrentFoodServiceImpl implements CurrentFoodService {
     @Autowired
     private CurrentFoodDao currentFoodDao;
+    @Autowired
+    private StorageItemDao storageItemDao;
 
     @Override
     public CurrentFoodEntity queryObject(Integer id) {
@@ -55,5 +60,19 @@ public class CurrentFoodServiceImpl implements CurrentFoodService {
     @Override
     public int deleteBatch(Integer[] ids) {
         return currentFoodDao.deleteBatch(ids);
+    }
+
+    @Override
+    @Transactional
+    public int inStorage(CurrentFoodEntity currentFood, StorageItemEntity storageItem){
+        storageItemDao.save(storageItem);
+        return currentFoodDao.save(currentFood);
+    }
+
+    @Override
+    @Transactional
+    public int outStorage(CurrentFoodEntity currentFood, StorageItemEntity storageItem){
+        storageItemDao.update(storageItem);
+        return currentFoodDao.update(currentFood);
     }
 }

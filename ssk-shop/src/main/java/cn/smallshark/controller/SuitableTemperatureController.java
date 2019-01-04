@@ -101,4 +101,14 @@ public class SuitableTemperatureController {
 
         return R.ok().put("list", list);
     }
+
+    /**
+     * 根据分类的id查找合适的温度
+     */
+    @RequestMapping("/queryByCateId/{id}")
+    public R queryByCateId(@PathVariable("id") Integer id){
+        SuitableTemperatureEntity suitableTemperature = suitableTemperatureService.queryObjectByCateId(id);
+
+        return R.ok().put("suitableTemperature", suitableTemperature);
+    }
 }

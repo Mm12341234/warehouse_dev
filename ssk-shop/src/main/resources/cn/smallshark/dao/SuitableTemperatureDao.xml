@@ -24,6 +24,18 @@
 		where category_id = #{id}
 	</select>
 
+	<select id="queryObjectByCateId" resultType="cn.smallshark.entity.SuitableTemperatureEntity">
+		select
+			`id`,
+			`name`,
+			`category_id`,
+			`min_temperature`,
+			`max_temperature`,
+			`remark`
+		from suitable_temperature
+		where category_id = #{id}
+	</select>
+
 	<select id="queryList" resultType="cn.smallshark.entity.SuitableTemperatureEntity">
 		select
     		`id`,

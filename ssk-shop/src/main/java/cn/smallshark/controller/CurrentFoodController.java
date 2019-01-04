@@ -3,6 +3,8 @@ package cn.smallshark.controller;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import cn.smallshark.entity.StorageItemEntity;
+import cn.smallshark.service.StorageItemService;
 import cn.smallshark.utils.excel.ExcelExport;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 public class CurrentFoodController {
     @Autowired
     private CurrentFoodService currentFoodService;
+    @Autowired
+    private StorageItemService storageItemService;
 
     /**
      * 查看列表
@@ -79,7 +83,30 @@ public class CurrentFoodController {
     @RequestMapping("/update")
     @RequiresPermissions("currentfood:update")
     public R update(@RequestBody CurrentFoodEntity currentFood) {
+
         currentFoodService.update(currentFood);
+
+        return R.ok();
+    }
+
+    /**
+     *  手动出库处理
+     */
+    @RequestMapping("/outStorage")
+    public R outStorage(@RequestBody CurrentFoodEntity currentFood) {
+        //出库的事务处理
+        //拿到库存的明细表
+        StorageItemEntity storageItem=storageItemService.queryObjectByPayNo(currentFood.getNo());
+        storageItem.setFinishTime(new Date());
+        storageItem.setOutType(1);
+        if(currentFood.getIsOutstorage()==2){
+            //正常出库
+            storageItem.setIsNormal(0);
+        }else{
+            //腐损出库
+            storageItem.setIsNormal(1);
+        }
+        currentFoodService.outStorage(currentFood,storageItem);
 
         return R.ok();
     }

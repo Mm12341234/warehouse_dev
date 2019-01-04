@@ -34,6 +34,24 @@
 		where id = #{id}
 	</select>
 
+	<!--根据订单no查找Object-->
+	<select id="queryObjectByPayNo" resultType="cn.smallshark.entity.StorageItemEntity">
+		select
+			`id`,
+			`no`,
+			`customer_id`,
+			`category_id`,
+			`num`,
+			`shelves_id`,
+			`shelves_num`,
+			`in_type`,
+			`check_id`,
+			`is_normal`,
+			`finish_time`
+		from storage_item
+		where no = #{no}
+	</select>
+
 	<select id="queryList" resultType="cn.smallshark.entity.StorageItemEntity">
 		select
     		`id`,
@@ -108,6 +126,7 @@
 			<if test="shelvesId != null">`shelves_id` = #{shelvesId}, </if>
 			<if test="shelvesNum != null">`shelves_num` = #{shelvesNum}, </if>
 			<if test="inType != null">`in_type` = #{inType}, </if>
+			<if test="outType != null">`out_type` = #{outType}, </if>
 			<if test="checkId != null">`check_id` = #{checkId}, </if>
 			<if test="isNormal != null">`is_normal` = #{isNormal}, </if>
 			<if test="finishTime != null">`finish_time` = #{finishTime}</if>

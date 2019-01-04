@@ -10,5 +10,5 @@ import cn.smallshark.entity.StorageItemEntity;
  * @date 2018-11-26 20:56:25
  */
 public interface StorageItemDao extends BaseDao<StorageItemEntity> {
-
+    StorageItemEntity queryObjectByPayNo(String no);
 }

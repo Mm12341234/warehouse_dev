@@ -1,8 +1,12 @@
 package cn.smallshark.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import cn.smallshark.entity.CurrentFoodEntity;
+import cn.smallshark.entity.StorageItemEntity;
+import cn.smallshark.service.CurrentFoodService;
 import cn.smallshark.utils.CommonUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,8 @@ import cn.smallshark.utils.R;
 public class InStorageController {
     @Autowired
     private InStorageService inStorageService;
+    @Autowired
+    private CurrentFoodService currentFoodService;
 
     /**
      * 查看列表
@@ -64,11 +70,34 @@ public class InStorageController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("instorage:save")
-    public R save(@RequestBody InStorageEntity inStorage) {
+    public R save(@RequestBody CurrentFoodEntity inStorage) {
         String no= CommonUtil.generateOrderNumber();
         inStorage.setNo(no);
-        inStorageService.save(inStorage);
+        inStorage.setInstorageTime(new Date());
+        inStorage.setIsOutstorage(1);
+        //设置入库的方式--手动
+        inStorage.setInType(1);
 
+        //增加到出入库明细表中
+        StorageItemEntity storageItem=new StorageItemEntity();
+        storageItem.setCategoryId(inStorage.getCategoryId());
+        storageItem.setNo(no);
+        storageItem.setCustomerId(inStorage.getCustomerId());
+        storageItem.setNum(inStorage.getNum());
+        storageItem.setShelvesId(inStorage.getShelvesId());
+        storageItem.setShelvesNum(inStorage.getShelvesNum());
+        storageItem.setCheckId(inStorage.getCheckId());
+        storageItem.setInCheckTime(new Date());
+        storageItem.setInStorageTime(inStorage.getCreateTime());
+        storageItem.setInType(1);
+
+        //确定入库
+        try{
+            currentFoodService.inStorage(inStorage,storageItem);
+        }catch(Exception e){
+            e.printStackTrace();
+            return R.ok("网络异常");
+        }
         return R.ok();
     }
 

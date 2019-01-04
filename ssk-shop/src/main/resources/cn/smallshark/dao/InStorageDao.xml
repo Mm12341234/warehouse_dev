@@ -15,7 +15,7 @@
 		<result property="checkId" column="check_id"/>
 	</resultMap>
 
-	<select id="queryObject" resultType="cn.smallshark.entity.AutoInStorageEntity">
+	<select id="queryObject" resultType="cn.smallshark.entity.InStorageEntity">
 		   select
 			in_storage.`id`,
 			in_storage.`no`,

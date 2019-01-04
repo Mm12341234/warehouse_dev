@@ -69,4 +69,9 @@ public interface StorageItemService {
      * @return 删除条数
      */
     int deleteBatch(Integer[] ids);
+
+    /**
+     * 根据订单编号查找明细
+     */
+    StorageItemEntity queryObjectByPayNo(String no);
 }

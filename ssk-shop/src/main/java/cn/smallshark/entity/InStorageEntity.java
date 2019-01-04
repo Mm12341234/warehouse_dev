@@ -56,4 +56,5 @@ public class InStorageEntity implements Serializable {
     private String shelvesName;
     //创建的时间
     private Date createTime;
+
 }

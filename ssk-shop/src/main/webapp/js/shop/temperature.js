@@ -79,8 +79,9 @@ function getTemperatureMap(id){
         }]
     });
     myChart.showLoading();    //数据加载完之前先显示一段简单的loading动画
-    var rootUrl = getRealPath();
-    var url = rootUrl +  "/foodtemperature/queryTemperature1/" + id;
+    // var rootUrl = getRealPath();
+    // var url = rootUrl +  "/foodtemperature/queryTemperature1/" + id;
+    var url="/foodtemperature/queryTemperature1/" + id;
     console.log(url);
     $.ajax({
         // type : "post",
@@ -137,8 +138,9 @@ function getTemperatureMap(id){
 function getNewFoodTemperature(id){
     //请求路径
     foodId = id;
-    var rootUrl = getRealPath();
-    var url = rootUrl + "/foodtemperature/getNewTemperature/" + foodId;
+    // var rootUrl = getRealPath();
+    // var url = rootUrl + "/foodtemperature/getNewTemperature/" + foodId;
+    var url="/foodtemperature/getNewTemperature/" + foodId;
     $.ajax({
         async: true,
         url : url,

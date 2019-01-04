@@ -69,7 +69,7 @@
 		LEFT JOIN shelves on in_storage.shelves_id=shelves.id
 		LEFT JOIN warehouse on warehouse.id=shelves.warehouse_id
 		LEFT JOIN room on room.id=shelves.room_id
-		WHERE 1=1 AND in_storage.in_type=0
+		WHERE 1=1 AND in_storage.in_type=0 AND in_storage.`status`=0
 		<if test="name != null and name.trim() != ''">
 			AND name LIKE concat('%',#{name},'%')
 		</if>

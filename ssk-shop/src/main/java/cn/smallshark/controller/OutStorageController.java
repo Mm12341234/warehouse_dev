@@ -3,6 +3,8 @@ package cn.smallshark.controller;
 import java.util.List;
 import java.util.Map;
 
+import cn.smallshark.entity.CurrentFoodEntity;
+import cn.smallshark.service.CurrentFoodService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +31,8 @@ import cn.smallshark.utils.R;
 public class OutStorageController {
     @Autowired
     private OutStorageService outStorageService;
+    @Autowired
+    private CurrentFoodService currentFoodService;
 
     /**
      * 查看列表
@@ -41,6 +45,9 @@ public class OutStorageController {
 
         List<OutStorageEntity> outStorageList = outStorageService.queryList(query);
         int total = outStorageService.queryTotal(query);
+
+//        List<CurrentFoodEntity> currentFoodList=currentFoodService.queryList(query);
+//        int total = currentFoodService.queryTotal(query);
 
         PageUtils pageUtil = new PageUtils(outStorageList, total, query.getLimit(), query.getPage());
 

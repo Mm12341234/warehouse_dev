@@ -47,6 +47,11 @@ public interface InStorageService {
     int save(InStorageEntity inStorage);
 
     /**
+     * 入库事务
+     */
+
+
+    /**
      * 根据主键更新实体
      *
      * @param inStorage 实体

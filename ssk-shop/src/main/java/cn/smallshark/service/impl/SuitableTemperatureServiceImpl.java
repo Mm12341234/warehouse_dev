@@ -56,4 +56,9 @@ public class SuitableTemperatureServiceImpl implements SuitableTemperatureServic
     public int deleteBatch(Integer[] ids) {
         return suitableTemperatureDao.deleteBatch(ids);
     }
+
+    @Override
+    public SuitableTemperatureEntity queryObjectByCateId(Integer id){
+        return suitableTemperatureDao.queryObjectByCateId(id);
+    }
 }
