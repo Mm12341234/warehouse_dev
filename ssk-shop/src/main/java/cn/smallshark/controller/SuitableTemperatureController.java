@@ -3,13 +3,13 @@ package cn.smallshark.controller;
 import java.util.List;
 import java.util.Map;
 
+import cn.smallshark.entity.CurrentFoodEntity;
+import cn.smallshark.entity.FoodtemperatureEntity;
+import cn.smallshark.service.CurrentFoodService;
+import cn.smallshark.service.FoodtemperatureService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import cn.smallshark.entity.SuitableTemperatureEntity;
 import cn.smallshark.service.SuitableTemperatureService;
@@ -29,6 +29,9 @@ import cn.smallshark.utils.R;
 public class SuitableTemperatureController {
     @Autowired
     private SuitableTemperatureService suitableTemperatureService;
+
+    @Autowired
+    private CurrentFoodService currentFoodService;
 
     /**
      * 查看列表
@@ -51,10 +54,15 @@ public class SuitableTemperatureController {
      * 查看信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("suitabletemperature:info")
+    @ResponseBody
+    //@RequiresPermissions("suitabletemperature:info")
     public R info(@PathVariable("id") Integer id) {
-        SuitableTemperatureEntity suitableTemperature = suitableTemperatureService.queryObject(id);
-
+        SuitableTemperatureEntity suitableTemperature = null;
+        CurrentFoodEntity currentFoodEntity = currentFoodService.queryObject(id);
+        if(currentFoodEntity != null){
+             Integer category = currentFoodEntity.getCategoryId();
+             suitableTemperature = suitableTemperatureService.queryObject(category);
+        }
         return R.ok().put("suitableTemperature", suitableTemperature);
     }
 

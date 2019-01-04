@@ -11,7 +11,13 @@ $(function(){
 
 //开始加载
 function Start(id){
+    //1. 更新食物的最适存储温度范围
+    updateSuitFoodtemperature(id);
+
+    //2. 获取前十分钟的温度折线图
     getTemperatureMap(id);
+
+    //3. 获取最新温度折线图
     getNewFoodTemperature(id);
 }
 
@@ -30,6 +36,38 @@ function getRealPath(){
         var realPath=localhostPaht+projectName;
     return realPath;
 }
+//更新食物的最适存储温度范围
+function updateSuitFoodtemperature(id){
+    var url = getRealPath() + "/suitabletemperature/info/" + id;
+   $.ajax({
+     type: "post",
+     url:  url,
+     dateType: "json",
+     success : function (data) {
+         if(data.code == 0){
+             $("#suitTemperature").append("<b>"+ data.suitableTemperature.minTemperature +" ~  "+ data.suitableTemperature.maxTemperature + "°C </b>");
+         }
+     }
+   });
+}
+
+//更新食物的超出存储温度范围警告次数
+function getWarnCount(id){
+    var url = getRealPath() + "/warn/count/" + id;
+    $.ajax({
+        type: "post",
+        url:  url,
+        dateType: "json",
+        success : function (data) {
+            if(data.code == 0){
+                $("#warmCount").children('b').remove();
+                $("#warmCount").append("<b>"+ data.warnCount + " </b>");
+            }
+        }
+    });
+}
+
+
 
 //获取前十分钟的温度折线图
 function getTemperatureMap(id){
@@ -122,7 +160,6 @@ function getTemperatureMap(id){
                         }
                     }]
                 });
-
             }
         },
         error : function(errorMsg) {
@@ -179,6 +216,7 @@ function getNewFoodTemperature(id){
                         }
                     }]
                 });
+                getWarnCount(foodId);
             }
         },
         error : function(errorMsg) {

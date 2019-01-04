@@ -12,4 +12,11 @@ public interface WarnService {
      */
     public void save(WarnEntity warnEntity);
 
+    /**
+     * 获取警告的次数
+     * @param foodId
+     * @return
+     */
+    public int queryWarnCount(Integer foodId);
+
 }

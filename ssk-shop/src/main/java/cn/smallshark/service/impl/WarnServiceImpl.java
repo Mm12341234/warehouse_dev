@@ -16,4 +16,9 @@ public class WarnServiceImpl implements WarnService {
     public void save(WarnEntity warnEntity) {
         warnDao.save(warnEntity);
     }
+
+    @Override
+    public int queryWarnCount(Integer foodId) {
+       return warnDao.queryWarnCount(foodId);
+    }
 }

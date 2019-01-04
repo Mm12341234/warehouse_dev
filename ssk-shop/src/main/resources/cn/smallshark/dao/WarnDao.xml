@@ -14,6 +14,13 @@
         <result property="remark" column="remark"/>
     </resultMap>
 
+    <select id="queryWarnCount" resultType="java.lang.Integer">
+        SELECT  count(`current_food_id`)
+        FROM  warm
+        GROUP BY `current_food_id`
+        HAVING `current_food_id`=#{foodId}
+    </select>
+
 	<insert id="save" parameterType="cn.smallshark.entity.WarnEntity">
 		insert into warm(
             `id`,
