@@ -16,6 +16,12 @@ import java.util.Map;
 public interface CurrentFoodService {
 
     /**
+     * 查询所有的实体
+     * @return
+     */
+//    List<CurrentFoodEntity> queryList();
+
+    /**
      * 根据主键查询实体
      *
      * @param id 主键

@@ -27,6 +27,9 @@ public class CurrentFoodServiceImpl implements CurrentFoodService {
     @Autowired
     private StorageItemDao storageItemDao;
 
+    /*@Override
+    public List<CurrentFoodEntity> queryList() { return currentFoodDao.queryList(id)};*/
+
     @Override
     public CurrentFoodEntity queryObject(Integer id) {
         return currentFoodDao.queryObject(id);

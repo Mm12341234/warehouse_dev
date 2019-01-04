@@ -15,6 +15,21 @@
         <result property="checkId" column="check_id"/>
     </resultMap>
 
+	<select id="queryFoodList" resultType="cn.smallshark.entity.CurrentFoodEntity">
+		select
+			current_food.`id`,
+			current_food.`no`,
+			current_food.`customer_id`,
+			current_food.`category_id`,
+			current_food.`num`,
+			current_food.`shelves_id`,
+			current_food.`shelves_num`,
+			current_food.`in_type`,
+			current_food.`check_id`
+		from current_food
+		ORDER BY current_food.`category_id`
+	</select>
+
 	<select id="queryObject" resultType="cn.smallshark.entity.CurrentFoodEntity">
 		select
 			current_food.`id`,
