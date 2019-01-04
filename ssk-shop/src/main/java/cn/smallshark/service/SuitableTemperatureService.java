@@ -69,4 +69,9 @@ public interface SuitableTemperatureService {
      * @return 删除条数
      */
     int deleteBatch(Integer[] ids);
+
+    /**
+     * 根据分类的id查找优秀分类
+     */
+    SuitableTemperatureEntity queryObjectByCateId(Integer id);
 }

@@ -50,16 +50,6 @@ public class WarehouseController {
         return R.ok().put("page", pageUtil);
     }
 
-    /**
-     * 查看仓库所有数据
-     */
-    @RequestMapping("/queryHouseAll")
-    public R queryAll() {
-
-        List<WarehouseEntity> warehouseList = warehouseService.queryHouseAll();
-
-        return R.ok().put("list", warehouseList);
-    }
 
     /**
      * 查看信息
@@ -114,6 +104,17 @@ public class WarehouseController {
         List<WarehouseEntity> list = warehouseService.queryList(params);
 
         return R.ok().put("list", list);
+    }
+
+    /**
+     * 查看仓库所有数据
+     */
+    @RequestMapping("/queryHouseAll")
+    public R queryAll() {
+
+        List<WarehouseEntity> warehouseList = warehouseService.queryHouseAll();
+
+        return R.ok().put("list", warehouseList);
     }
 
     /**

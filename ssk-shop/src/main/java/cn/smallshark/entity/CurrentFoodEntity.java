@@ -62,6 +62,8 @@ public class CurrentFoodEntity implements Serializable {
 
     //交易单的状态
     private Integer status;
+    //是否出库
+    private Integer isOutstorage;
 
 
 }

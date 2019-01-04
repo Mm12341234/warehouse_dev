@@ -10,5 +10,5 @@ import cn.smallshark.entity.SuitableTemperatureEntity;
  * @date 2018-12-03 01:00:26
  */
 public interface SuitableTemperatureDao extends BaseDao<SuitableTemperatureEntity> {
-
+    SuitableTemperatureEntity queryObjectByCateId(Integer id);
 }

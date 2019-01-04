@@ -4,7 +4,7 @@ $(function () {
         // multiselect:false,
         colModel: [
 			{label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-			{label: '入库单编号', name: 'no', index: 'no', width: 80},
+			// {label: '入库单编号', name: 'no', index: 'no', width: 80},
 			{label: '客户姓名', name: 'customerName', index: 'customer_id', width: 80},
 			{label: '类别', name: 'cateName', index: 'category_id', width: 80},
 			{label: '数量', name: 'num', index: 'num', width: 80,

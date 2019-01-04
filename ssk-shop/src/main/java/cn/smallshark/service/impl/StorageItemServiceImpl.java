@@ -56,4 +56,9 @@ public class StorageItemServiceImpl implements StorageItemService {
     public int deleteBatch(Integer[] ids) {
         return storageItemDao.deleteBatch(ids);
     }
+
+    @Override
+    public StorageItemEntity queryObjectByPayNo(String no){
+        return storageItemDao.queryObjectByPayNo(no);
+    }
 }

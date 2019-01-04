@@ -82,7 +82,7 @@
 		LEFT JOIN shelves on current_food.shelves_id=shelves.id
 		LEFT JOIN warehouse on warehouse.id=shelves.warehouse_id
 		LEFT JOIN room on room.id=shelves.room_id
-		WHERE 1=1
+		WHERE 1=1 AND current_food.`is_outstorage`=1
 		<if test="name != null and name.trim() != ''">
 			AND name LIKE concat('%',#{name},'%')
 		</if>
@@ -101,7 +101,7 @@
 	
  	<select id="queryTotal" resultType="int">
 		select count(*) from current_food
-		WHERE 1=1
+		WHERE 1=1 AND current_food.`is_outstorage`=1
         <if test="name != null and name.trim() != ''">
             AND name LIKE concat('%',#{name},'%')
         </if>
@@ -116,6 +116,7 @@
 			`shelves_id`,
 			`shelves_num`,
 			`in_type`,
+			`is_outstorage`,
 			`check_id`)
 		values(
 			#{no},
@@ -125,6 +126,7 @@
 			#{shelvesId},
 			#{shelvesNum},
 			#{inType},
+			#{isOutstorage},
 			#{checkId})
 	</insert>
 	 
@@ -138,6 +140,7 @@
 			<if test="shelvesId != null">`shelves_id` = #{shelvesId}, </if>
 			<if test="shelvesNum != null">`shelves_num` = #{shelvesNum}, </if>
 			<if test="inType != null">`in_type` = #{inType}, </if>
+			<if test="isOutstorage != null">`is_outstorage` = #{isOutstorage}, </if>
 			<if test="checkId != null">`check_id` = #{checkId}</if>
 		</set>
 		where id = #{id}
