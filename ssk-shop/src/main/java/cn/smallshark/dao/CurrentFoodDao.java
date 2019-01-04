@@ -2,6 +2,8 @@ package cn.smallshark.dao;
 
 import cn.smallshark.entity.CurrentFoodEntity;
 
+import java.util.List;
+
 /**
  * Dao
  *
@@ -11,4 +13,5 @@ import cn.smallshark.entity.CurrentFoodEntity;
  */
 public interface CurrentFoodDao extends BaseDao<CurrentFoodEntity> {
 
+    List<CurrentFoodEntity> queryFoodList();
 }
