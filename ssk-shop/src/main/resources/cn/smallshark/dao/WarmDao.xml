@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smallshark.dao.WarmDao">
+
+    <resultMap type="cn.smallshark.entity.WarmEntity" id="warmMap">
+        <result property="id" column="id"/>
+        <result property="currentFoodId" column="current_food_id"/>
+        <result property="type" column="type"/>
+        <result property="shelvesId" column="shelves_id"/>
+        <result property="roomId" column="room_id"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="time" column="time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryAllNumGroupByWareHouse" resultType="cn.smallshark.response.WarmVo">
+		SELECT
+			warehouse.`name`,
+			count(*) as num
+		from warm
+		left join warehouse on warehouse.id=warm.warehouse_id
+		GROUP BY warm.warehouse_id
+	</select>
+
+	<select id="queryObject" resultType="cn.smallshark.entity.WarmEntity">
+		select
+			`id`,
+			`current_food_id`,
+			`type`,
+			`shelves_id`,
+			`room_id`,
+			`warehouse_id`,
+			`time`,
+			`remark`
+		from warm
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="cn.smallshark.entity.WarmEntity">
+		select
+			warm.`id`,
+			food_category.`name`,
+			`type`,
+			`time`,
+			warm.`remark`,
+			warehouse.`name` as warehouseName,
+			room.`name` as roomName,
+			shelves.`name` as shelvesName
+		from warm
+		left JOIN current_food on current_food.id=warm.current_food_id
+		left JOIN food_category on food_category.id=current_food.category_id
+		LEFT JOIN shelves on current_food.shelves_id=shelves.id
+		LEFT JOIN warehouse on warehouse.id=shelves.warehouse_id
+		LEFT JOIN room on room.id=shelves.room_id
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from warm
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="cn.smallshark.entity.WarmEntity">
+		insert into warm(
+			`id`,
+			`current_food_id`,
+			`type`,
+			`shelves_id`,
+			`room_id`,
+			`warehouse_id`,
+			`time`,
+			`remark`)
+		values(
+			#{id},
+			#{currentFoodId},
+			#{type},
+			#{shelvesId},
+			#{roomId},
+			#{warehouseId},
+			#{time},
+			#{remark})
+	</insert>
+	 
+	<update id="update" parameterType="cn.smallshark.entity.WarmEntity">
+		update warm 
+		<set>
+			<if test="currentFoodId != null">`current_food_id` = #{currentFoodId}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="shelvesId != null">`shelves_id` = #{shelvesId}, </if>
+			<if test="roomId != null">`room_id` = #{roomId}, </if>
+			<if test="warehouseId != null">`warehouse_id` = #{warehouseId}, </if>
+			<if test="time != null">`time` = #{time}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from warm where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from warm where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

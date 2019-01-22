@@ -37,24 +37,37 @@
             <Form-item label="货架名称" prop="name">
                 <i-input v-model="shelves.name" placeholder="货架名称"/>
             </Form-item>
+            <Form-item label="所在仓库" prop="wareId">
+                <Row>
+                    <i-select v-model="shelves.wareId"  @on-change="queryRoom">
+                        <i-option v-for="item in warehouseList" :key="item.id" :value="item.id">{{ item.name }}</i-option>
+                    </i-select>
+                </Row>
+            </Form-item>
+            <Form-item label="房间" prop="roomId">
+                <Row>
+                    <i-select v-model="shelves.roomId">
+                        <i-option v-for="item in roomList" :key="item.id" :value="item.id">{{ item.name }}</i-option>
+                    </i-select>
+                </Row>
+            </Form-item>
+            <Form-item label="详细地址" prop="addressDetail">
+                <i-input v-model="shelves.addressDetail" placeholder="详细地址"/>
+            </Form-item>
             <Form-item label="最大容量" prop="maxContent">
                 <i-input v-model="shelves.maxContent" placeholder=""/>
-            </Form-item>
-            <Form-item label="所在仓库" prop="permanent">
-                <i-select v-model="shelves.wareId" @on-change="chooseWarehouse">
-                    <i-option v-for="item in warehouseList" :value="item.id" :key="item.id">{{ item.name }}</i-option>
-                </i-select>
-            </Form-item>
-            <Form-item label="房间号">
-                <i-select v-model="shelves.roomId" >
-                    <i-option v-for="item in roomList" :value="item.id" :key="item.id">{{ item.name }}</i-option>
-                </i-select>
             </Form-item>
             <Form-item label="货架的层数" prop="floor">
                 <i-input v-model="shelves.floor" placeholder="货架的层数"/>
             </Form-item>
-            <Form-item label="详细地址" prop="addressDetail">
-                <i-input v-model="shelves.addressDetail" placeholder="详细地址"/>
+            <Form-item label="仓库的楼层" prop="warehouseFloor">
+                <i-input v-model="shelves.warehouseFloor" placeholder="货架所在仓库的楼层"/>
+            </Form-item>
+            <Form-item label="仓库所在的行" prop="row">
+                <i-input v-model="shelves.row" placeholder="仓库所在的行"/>
+            </Form-item>
+            <Form-item label="仓库所在的列" prop="column">
+                <i-input v-model="shelves.column" placeholder="仓库所在的列"/>
             </Form-item>
             <Form-item>
                 <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>

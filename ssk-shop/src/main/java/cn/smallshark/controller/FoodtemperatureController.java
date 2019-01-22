@@ -1,22 +1,24 @@
 package cn.smallshark.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import cn.smallshark.entity.*;
+import cn.smallshark.entity.CurrentFoodEntity;
+import cn.smallshark.entity.FoodtemperatureEntity;
+import cn.smallshark.entity.SuitableTemperatureEntity;
+import cn.smallshark.entity.WarnEntity;
 import cn.smallshark.service.*;
+import cn.smallshark.utils.PageUtils;
+import cn.smallshark.utils.Query;
+import cn.smallshark.utils.R;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
-import cn.smallshark.utils.PageUtils;
-import cn.smallshark.utils.Query;
-import cn.smallshark.utils.R;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Controller
@@ -58,7 +60,7 @@ public class FoodtemperatureController {
     @ResponseBody
     public String getNewFoodTemperature(@PathVariable("foodId") Integer foodId) throws Exception {
         //1. 根据查询食品id，获取食品的温度对象
-            FoodtemperatureEntity foodTemperature = foodtemperatureService.queryNewFoodTemperatureById(foodId);
+        FoodtemperatureEntity foodTemperature = foodtemperatureService.queryNewFoodTemperatureById(foodId);
         //根据食品id，查询食品对象，获取对应的类别id。
         CurrentFoodEntity currentFood = currentFoodService.queryObject(foodId);
         if(currentFood != null){

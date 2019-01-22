@@ -21,9 +21,9 @@
     </style>
 </head>
 <body>
+
 <div id="rrapp" v-cloak>
 	<div v-show="showList">
-
         <Tabs value="name1" type="card">
             <Tab-pane label="图表统计" name="name1">
                 <div id="left" style="width: 900px;height:500px;">
@@ -32,7 +32,7 @@
                 </div>
             </Tab-pane>
 
-            <Tab-pane label="存储明细" name="name0">
+            <Tab-pane label="报警明细" name="name0">
                 <Row :gutter="16">
                     <div class="search-group">
                         <i-col span="4">
@@ -52,6 +52,6 @@
     </div>
 </div>
 
-<script src="${rc.contextPath}/js/shop/storageitem.js?_${date.systemTime}"></script>
+<script src="${rc.contextPath}/js/shop/warm.js?_${date.systemTime}"></script>
 </body>
 </html>

@@ -1,14 +1,14 @@
 package cn.smallshark.service.impl;
 
+import cn.smallshark.dao.StorageItemDao;
+import cn.smallshark.entity.StorageItemEntity;
+import cn.smallshark.response.StorageItemVo;
+import cn.smallshark.service.StorageItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-
-import cn.smallshark.dao.StorageItemDao;
-import cn.smallshark.entity.StorageItemEntity;
-import cn.smallshark.service.StorageItemService;
 
 /**
  * Service实现类
@@ -60,5 +60,10 @@ public class StorageItemServiceImpl implements StorageItemService {
     @Override
     public StorageItemEntity queryObjectByPayNo(String no){
         return storageItemDao.queryObjectByPayNo(no);
+    }
+
+    @Override
+    public List<StorageItemVo> queryAllNumGroupByWareHouse(){
+        return storageItemDao.queryAllNumGroupByWareHouse();
     }
 }

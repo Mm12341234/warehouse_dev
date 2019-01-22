@@ -52,20 +52,40 @@
 		where no = #{no}
 	</select>
 
+	<select id="queryAllNumGroupByWareHouse" resultType="cn.smallshark.response.StorageItemVo">
+		SELECT
+			warehouse.`name`,
+			count(*) as num
+		from storage_item
+		left join shelves on shelves.id=storage_item.shelves_id
+		left join warehouse on warehouse.id=shelves.warehouse_id
+		GROUP BY shelves.warehouse_id
+	</select>
+
 	<select id="queryList" resultType="cn.smallshark.entity.StorageItemEntity">
 		select
-    		`id`,
-    		`no`,
-    		`customer_id`,
-    		`category_id`,
-    		`num`,
-    		`shelves_id`,
-    		`shelves_num`,
-    		`in_type`,
-    		`check_id`,
-    		`is_normal`,
-    		`finish_time`
+			storage_item.`id`,
+			`no`,
+			customer.`name` as customerName,
+			food_category.`name` as categoryName,
+			`num`,
+			`shelves_id`,
+			`shelves_num`,
+			`in_type`,
+			examiner.name as examinerName,
+			`is_normal`,
+			`finish_time`,
+			instorage_time,
+			warehouse.`name` as warehouseName,
+			room.`name` as roomName,
+			shelves.`name` as shelvesName
 		from storage_item
+		LEFT JOIN customer on customer.id=storage_item.customer_id
+		left JOIN food_category on food_category.id=storage_item.category_id
+		left JOIN examiner on examiner.id=storage_item.check_id
+		LEFT JOIN shelves on storage_item.shelves_id=shelves.id
+		LEFT JOIN warehouse on warehouse.id=shelves.warehouse_id
+		LEFT JOIN room on room.id=shelves.room_id
 		WHERE 1=1
 		<if test="name != null and name.trim() != ''">
 			AND name LIKE concat('%',#{name},'%')
@@ -102,6 +122,7 @@
 			`in_type`,
 			`check_id`,
 			`is_normal`,
+			instorage_time,
 			`finish_time`)
 		values(
 			#{no},
@@ -113,6 +134,7 @@
 			#{inType},
 			#{checkId},
 			#{isNormal},
+			#{inStorageTime},
 			#{finishTime})
 	</insert>
 	 

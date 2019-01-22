@@ -19,8 +19,11 @@
 			`address_detail`,
 			`max_content`,
 			`room_id`,
+			`row`,
+			`column`,
 			`warehouse_id` as ware_id,
-			`floor`
+			`floor`,
+			 warehouse_floor
 		from shelves
 		where id = #{id}
 	</select>
@@ -43,7 +46,10 @@
 		    shelves.`warehouse_id` as ware_id,
 			shelves.`floor`,
 			room.`name` as room_name,
-			warehouse.`name` as warehouse_name
+			warehouse.`name` as warehouse_name,
+		    shelves.`row`,
+		    shelves.`column`,
+		    shelves.`warehouse_floor`
 		from shelves
 		LEFT JOIN room on room.id=shelves.room_id
 		LEFT JOIN warehouse on warehouse.id=room.warehouse_id
@@ -79,6 +85,8 @@
 			`max_content`,
 			`room_id`,
 			`warehouse_id`,
+			`row`,
+			`column`,
 			`floor`)
 		values(
 			#{name},
@@ -86,6 +94,8 @@
 			#{maxContent},
 			#{roomId},
 			#{wareId},
+			#{row},
+			#{column},
 			#{floor})
 	</insert>
 	 
@@ -97,6 +107,8 @@
 			<if test="maxContent != null">`max_content` = #{maxContent}, </if>
 			<if test="roomId != null">`room_id` = #{roomId}, </if>
 			<if test="wareId != null">`warehouse_id` = #{wareId}, </if>
+			<if test="row != null">`row` = #{row}, </if>
+			<if test="column != null">`column` = #{column}, </if>
 			<if test="floor != null">`floor` = #{floor}</if>
 		</set>
 		where id = #{id}

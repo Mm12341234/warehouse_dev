@@ -9,7 +9,7 @@
 
     <modules>
         <module>ssk-common</module> <!-- 公共模块 -->
-        <module>ssk-schedule</module><!-- 定时任务模块-->
+        <!--<module>ssk-schedule</module>&lt;!&ndash; 定时任务模块&ndash;&gt;-->
         <module>ssk-gen</module> <!-- 代码生成器模块 -->
         <module>ssk-api</module> <!-- API模块 -->
         <module>ssk-framework</module>

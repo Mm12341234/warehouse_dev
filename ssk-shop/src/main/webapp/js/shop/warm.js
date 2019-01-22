@@ -1,48 +1,33 @@
 $(function () {
     $("#jqGrid").Grid({
-        url: '../storageitem/list',
-        multiselect: false,
+        url: '../warm/list',
         colModel: [
 			{label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-			{label: '交易单编号', name: 'no', index: 'no', width: 80},
-			{label: '客户', name: 'customerName', index: 'customer_id', width: 80},
-			{label: '分类', name: 'categoryName', index: 'category_id', width: 80},
-			{label: '数量', name: 'num', index: 'num', width: 80},
-			{label: '所在位置', name: 'shelvesId', index: 'shelves_id', width: 80,
-				formatter(value,option,rowObject){
-                    return rowObject.warehouseName+">"+rowObject.roomName+">"+rowObject.shelvesName;
-				}
-			},
-			{label: '货架层数', name: 'shelvesNum', index: 'shelves_num', width: 80},
-			{label: '入库方式', name: 'inType', index: 'in_type', width: 80,
-				formatter(val){
-				    if(val==0){
-				    	return "自动";
-					}else{
-				    	return "手动";
-					}
-				}
-			},
-			{label: '审核员', name: 'examinerName', index: 'check_id', width: 80},
-			{label: '出库方式', name: 'isNormal', index: 'is_normal', width: 80,
-				formatter(val){
-				    if(val==0){
-				    	return "正常出库";
-					}else{
-				    	return "腐损出库";
-					}
-				}
-			},
-			{label: '入库时间', name: 'inStorageTime', index: 'finish_time', width: 80,
+			{label: '食物类型', name: 'name', index: 'current_food_id', width: 80},
+			{label: '报警类型', name: 'type', index: 'type', width: 80,
 				formatter(value){
-                    return transDate(value);
+				   if(value==0){
+				   	   return "未设置";
+				   }else if(value==1){
+				   	   return "温度报警";
+				   }else{
+				   	   return "保质期";
+				   }
 				}
 			},
-			{label: '出库时间', name: 'finishTime', index: 'finish_time', width: 80,
-                formatter(value){
-                    return transDate(value);
+			{label: '报警的位置', name: 'shelvesId', index: 'shelves_id', width: 80,
+                formatter(value,option,rowObject){
+                    return rowObject.warehouseName+">"+rowObject.roomName+">"+rowObject.shelvesName;
                 }
-			}]
+			},
+			{label: '', name: 'roomId', index: 'room_id', width: 80,hidden: true},
+			{label: '', name: 'warehouseId', index: 'warehouse_id', width: 80,hidden: true},
+			{label: '报警时间', name: 'time', index: 'time', width: 80,
+				formatter(value){
+				    return transDate(value);
+				}
+			},
+			{label: '备注', name: 'remark', index: 'remark', width: 80}]
     });
 
     //左边图形left
@@ -62,7 +47,7 @@ $(function () {
     });
 
     //统计入库数据
-    var url="/storageitem/queryAllNumGroupByWareHouse";
+    var url="/warm/queryAllNumGroupByWareHouse";
     $.ajax({
         async : true,               //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
         url : url,                  //请求发送到TestServlet处
@@ -147,7 +132,7 @@ $(function () {
     });
 
     //统计入库数据
-    var url="/storageitem/queryAllNumGroupByWareHouse";
+    var url="/warm/queryAllNumGroupByWareHouse";
     $.ajax({
         async : true,               //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
         url : url,                  //请求发送到TestServlet处
@@ -200,7 +185,6 @@ $(function () {
             myRightChart.hideLoading();
         }
     });
-
 });
 
 let vm = new Vue({
@@ -208,7 +192,7 @@ let vm = new Vue({
 	data: {
         showList: true,
         title: null,
-		storageItem: {},
+		warm: {},
 		ruleValidate: {
 			name: [
 				{required: true, message: '名称不能为空', trigger: 'blur'}
@@ -225,7 +209,7 @@ let vm = new Vue({
 		add: function () {
 			vm.showList = false;
 			vm.title = "新增";
-			vm.storageItem = {};
+			vm.warm = {};
 		},
 		update: function (event) {
             let id = getSelectedRow("#jqGrid");
@@ -238,10 +222,10 @@ let vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-            let url = vm.storageItem.id == null ? "../storageitem/save" : "../storageitem/update";
+            let url = vm.warm.id == null ? "../warm/save" : "../warm/update";
             Ajax.request({
 			    url: url,
-                params: JSON.stringify(vm.storageItem),
+                params: JSON.stringify(vm.warm),
                 type: "POST",
 			    contentType: "application/json",
                 successCallback: function (r) {
@@ -259,7 +243,7 @@ let vm = new Vue({
 
 			confirm('确定要删除选中的记录？', function () {
                 Ajax.request({
-				    url: "../storageitem/delete",
+				    url: "../warm/delete",
                     params: JSON.stringify(ids),
                     type: "POST",
 				    contentType: "application/json",
@@ -273,10 +257,10 @@ let vm = new Vue({
 		},
 		getInfo: function(id){
             Ajax.request({
-                url: "../storageitem/info/"+id,
+                url: "../warm/info/"+id,
                 async: true,
                 successCallback: function (r) {
-                    vm.storageItem = r.storageItem;
+                    vm.warm = r.warm;
                 }
             });
 		},

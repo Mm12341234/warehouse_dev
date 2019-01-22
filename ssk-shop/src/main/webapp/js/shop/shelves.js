@@ -4,10 +4,22 @@ $(function () {
         colModel: [
 			{label: 'id', name: 'id', index: 'id', key: true, hidden: true},
 			{label: '货架名称', name: 'name', index: 'name', width: 80},
-			{label: '最大容量', name: 'maxContent', index: 'max_content', width: 80},
+            {label: '仓库号(名字)', name: 'warehouseName', index: 'room_id', width: 80,hidden:true},
+            {label: '仓库位置', name: 'roomName', index: 'room_id', width: 80,
+                formatter(value,option,rowObject){
+                    return rowObject.warehouseName+">"+rowObject.roomName+">"+rowObject.warehouseFloor+"楼";
+                }
+            },
+            {label: '货架所在仓库的楼层', name: 'warehouseFloor', index: 'warehouse_floor', width: 80,hidden:true},
+            {label: '货架坐标', name: 'row', index: 'row', width: 80,
+                formatter(value,option,rowObject){
+                    return "(  "+rowObject.row+"  ,  "+rowObject.column+"  )";
+                }
+
+            },
+            {label: '最大容量', name: 'maxContent', index: 'max_content', width: 80},
             {label: '货架的层数', name: 'floor', index: 'floor', width: 80},
-            {label: '仓库号(名字)', name: 'warehouseName', index: 'room_id', width: 80},
-            {label: '房间号(名字)', name: 'roomName', index: 'room_id', width: 80},
+            {label: '仓库所在的列', name: 'column', index: 'column', width: 80,hidden:true},
             {label: '详细地址', name: 'addressDetail', index: 'address_detail', width: 80}]
     });
 });
@@ -17,7 +29,7 @@ let vm = new Vue({
 	data: {
         showList: true,
         title: null,
-		shelves: {"wareId":4},
+		shelves: {},
         warehouseList:[],
         roomList:[],
 		ruleValidate: {
@@ -37,7 +49,8 @@ let vm = new Vue({
 			vm.showList = false;
 			vm.title = "新增";
 			vm.shelves = {};
-			// vm.chooseWarehouse();
+            //初始化时，必须查找仓库
+            vm.chooseWarehouse();
 		},
 		update: function (event) {
             let id = getSelectedRow("#jqGrid");
@@ -46,8 +59,9 @@ let vm = new Vue({
 			}
 			vm.showList = false;
             vm.title = "修改";
-
-            vm.getInfo(id)
+            //初始化时，必须查找仓
+            vm.chooseWarehouse();
+            vm.getInfo(id);
 		},
 		saveOrUpdate: function (event) {
             let url = vm.shelves.id == null ? "../shelves/save" : "../shelves/update";
@@ -68,7 +82,6 @@ let vm = new Vue({
 			if (ids == null){
 				return;
 			}
-
 			confirm('确定要删除选中的记录？', function () {
                 Ajax.request({
 				    url: "../shelves/delete",
@@ -88,8 +101,12 @@ let vm = new Vue({
                 url: "../shelves/info/"+id,
                 async: true,
                 successCallback: function (r) {
+                    console.log(r.shelves);
                     vm.shelves = r.shelves;
-                    // vm.chooseWarehouse();
+                    vm.shelves.wareId = r.shelves.wareId.toString();
+                    // debugger
+                    console.log(typeof r.shelves.wareId+"    "+vm.shelves.wareId);
+                    console.log(typeof r.shelves.roomId);
                 }
             });
 		},
@@ -119,19 +136,15 @@ let vm = new Vue({
         //仓库联动
         chooseWarehouse:function(){
             Ajax.request({
-                url: "../warehouse/queryAllById/"+vm.shelves.wareId,
+                url: "../warehouse/queryAll",
                 async: true,
                 successCallback: function (r) {
-                    vm.warehouseList = [];
-                    for (var item of r.list) {
-                        // console.log(r.list);
-                        // vm.warehouseList.push({value:item.id,label:item.name})
-                        vm.warehouseList = r.list;
+                    vm.warehouseList=[];
+                    for(var i=0;i<r.list.length;i++){
+                        vm.warehouseList.push({id:r.list[i].id,name:r.list[i].name});
                     }
-                    // console.log(vm.warehouseList);
                 }
             });
-            vm.queryRoom();
         },
         //房间联动
         queryRoom:function(){

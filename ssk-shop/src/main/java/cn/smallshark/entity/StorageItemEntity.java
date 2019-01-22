@@ -50,4 +50,17 @@ public class StorageItemEntity implements Serializable {
 
     //是否让其入库
     private Integer isStorage;
+
+    //顾客的姓名
+    private String customerName;
+    //分类的名称
+    private String categoryName;
+    //审核员的名称
+    private String examinerName;
+    //仓库的名称
+    private String warehouseName;
+    //房间的名称
+    private String roomName;
+    //货架名称
+    private String shelvesName;
 }

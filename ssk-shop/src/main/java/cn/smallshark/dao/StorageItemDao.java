@@ -1,6 +1,9 @@
 package cn.smallshark.dao;
 
 import cn.smallshark.entity.StorageItemEntity;
+import cn.smallshark.response.StorageItemVo;
+
+import java.util.List;
 
 /**
  * Dao
@@ -11,4 +14,6 @@ import cn.smallshark.entity.StorageItemEntity;
  */
 public interface StorageItemDao extends BaseDao<StorageItemEntity> {
     StorageItemEntity queryObjectByPayNo(String no);
+
+    List<StorageItemVo> queryAllNumGroupByWareHouse();
 }

@@ -46,10 +46,10 @@
             <!--<Form-item label="仓库" prop="warehouseId">-->
                 <!--<i-input v-model="room.warehouseId" placeholder="仓库的id"/>-->
             <!--</Form-item>-->
-            <Form-item label="所在仓库" prop="permanent">
+            <Form-item label="所在仓库" prop="wareId">
                 <Row>
-                    <i-select v-model="room.warehouseId"  @on-change="chooseWarehouse('-2')">
-                        <i-option v-for="item in warehouseList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                    <i-select v-model="room.warehouseId">
+                        <i-option v-for="item in warehouseList" :key="item.value" :value="item.value">{{ item.label }}</i-option>
                     </i-select>
                 </Row>
             </Form-item>

@@ -1,8 +1,8 @@
 package cn.smallshark.controller;
 
-import cn.smallshark.entity.StorageItemEntity;
-import cn.smallshark.response.StorageItemVo;
-import cn.smallshark.service.StorageItemService;
+import cn.smallshark.entity.WarmEntity;
+import cn.smallshark.response.WarmVo;
+import cn.smallshark.service.WarmService;
 import cn.smallshark.utils.PageUtils;
 import cn.smallshark.utils.Query;
 import cn.smallshark.utils.R;
@@ -18,27 +18,27 @@ import java.util.Map;
  *
  * @author feking.fang
  * @email feking.fang@smallshark.cn
- * @date 2018-11-26 20:56:25
+ * @date 2019-01-05 10:25:46
  */
 @RestController
-@RequestMapping("storageitem")
-public class StorageItemController {
+@RequestMapping("warm")
+public class WarmController {
     @Autowired
-    private StorageItemService storageItemService;
+    private WarmService warmService;
 
     /**
      * 查看列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("storageitem:list")
+    @RequiresPermissions("warm:list")
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
 
-        List<StorageItemEntity> storageItemList = storageItemService.queryList(query);
-        int total = storageItemService.queryTotal(query);
+        List<WarmEntity> warmList = warmService.queryList(query);
+        int total = warmService.queryTotal(query);
 
-        PageUtils pageUtil = new PageUtils(storageItemList, total, query.getLimit(), query.getPage());
+        PageUtils pageUtil = new PageUtils(warmList, total, query.getLimit(), query.getPage());
 
         return R.ok().put("page", pageUtil);
     }
@@ -47,20 +47,20 @@ public class StorageItemController {
      * 查看信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("storageitem:info")
+    @RequiresPermissions("warm:info")
     public R info(@PathVariable("id") Integer id) {
-        StorageItemEntity storageItem = storageItemService.queryObject(id);
+        WarmEntity warm = warmService.queryObject(id);
 
-        return R.ok().put("storageItem", storageItem);
+        return R.ok().put("warm", warm);
     }
 
     /**
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("storageitem:save")
-    public R save(@RequestBody StorageItemEntity storageItem) {
-        storageItemService.save(storageItem);
+    @RequiresPermissions("warm:save")
+    public R save(@RequestBody WarmEntity warm) {
+        warmService.save(warm);
 
         return R.ok();
     }
@@ -69,9 +69,9 @@ public class StorageItemController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("storageitem:update")
-    public R update(@RequestBody StorageItemEntity storageItem) {
-        storageItemService.update(storageItem);
+    @RequiresPermissions("warm:update")
+    public R update(@RequestBody WarmEntity warm) {
+        warmService.update(warm);
 
         return R.ok();
     }
@@ -80,9 +80,9 @@ public class StorageItemController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("storageitem:delete")
+    @RequiresPermissions("warm:delete")
     public R delete(@RequestBody Integer[] ids) {
-        storageItemService.deleteBatch(ids);
+        warmService.deleteBatch(ids);
 
         return R.ok();
     }
@@ -93,7 +93,7 @@ public class StorageItemController {
     @RequestMapping("/queryAll")
     public R queryAll(@RequestParam Map<String, Object> params) {
 
-        List<StorageItemEntity> list = storageItemService.queryList(params);
+        List<WarmEntity> list = warmService.queryList(params);
 
         return R.ok().put("list", list);
     }
@@ -103,7 +103,7 @@ public class StorageItemController {
      */
     @RequestMapping("/queryAllNumGroupByWareHouse")
     public R queryAllNumGroupByWareHouse(){
-        List<StorageItemVo> list=storageItemService.queryAllNumGroupByWareHouse();
+        List<WarmVo> list=warmService.queryAllNumGroupByWareHouse();
         return R.ok().put("list",list);
     }
 }

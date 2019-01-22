@@ -1,7 +1,7 @@
 package cn.smallshark.service;
 
-import cn.smallshark.entity.StorageItemEntity;
-import cn.smallshark.response.StorageItemVo;
+import cn.smallshark.entity.WarmEntity;
+import cn.smallshark.response.WarmVo;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +11,9 @@ import java.util.Map;
  *
  * @author feking.fang
  * @email feking.fang@smallshark.cn
- * @date 2018-11-26 20:56:25
+ * @date 2019-01-05 10:25:46
  */
-public interface StorageItemService {
+public interface WarmService {
 
     /**
      * 根据主键查询实体
@@ -21,7 +21,7 @@ public interface StorageItemService {
      * @param id 主键
      * @return 实体
      */
-    StorageItemEntity queryObject(Integer id);
+    WarmEntity queryObject(Integer id);
 
     /**
      * 分页查询
@@ -29,7 +29,7 @@ public interface StorageItemService {
      * @param map 参数
      * @return list
      */
-    List<StorageItemEntity> queryList(Map<String, Object> map);
+    List<WarmEntity> queryList(Map<String, Object> map);
 
     /**
      * 分页统计总数
@@ -42,18 +42,18 @@ public interface StorageItemService {
     /**
      * 保存实体
      *
-     * @param storageItem 实体
+     * @param warm 实体
      * @return 保存条数
      */
-    int save(StorageItemEntity storageItem);
+    int save(WarmEntity warm);
 
     /**
      * 根据主键更新实体
      *
-     * @param storageItem 实体
+     * @param warm 实体
      * @return 更新条数
      */
-    int update(StorageItemEntity storageItem);
+    int update(WarmEntity warm);
 
     /**
      * 根据主键删除
@@ -71,13 +71,5 @@ public interface StorageItemService {
      */
     int deleteBatch(Integer[] ids);
 
-    /**
-     * 根据订单编号查找明细
-     */
-    StorageItemEntity queryObjectByPayNo(String no);
-
-    /**
-     * 根据
-     */
-    List<StorageItemVo> queryAllNumGroupByWareHouse();
+    List<WarmVo> queryAllNumGroupByWareHouse();
 }

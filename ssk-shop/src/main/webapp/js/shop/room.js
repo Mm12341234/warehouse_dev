@@ -4,11 +4,16 @@ $(function () {
         colModel: [
 			{label: 'id', name: 'id', index: 'id', key: true, hidden: true},
 			{label: '房间名称', name: 'name', index: 'name', width: 80},
-			{label: '详细地址', name: 'addressDetail', index: 'address_detail', width: 80},
-			{label: '最大容量', name: 'maxContent', index: 'max_content', width: 80},
-			{label: '所属仓库', name: 'warehouseAddress', index: 'warehouse_id', width: 80},
-            {label: '仓库名称', name: 'warehouseName', index: 'warehouse_id', width: 80},
-			{label: '属于仓库的第几层楼', name: 'floorNum', index: 'floor_num', width: 80}]
+			{label: '所属仓库', name: 'warehouseAddress', index: 'warehouse_id', width: 80,hidden:true},
+            {label: '仓库名称', name: 'warehouseName', index: 'warehouse_id', width: 80,
+                formatter(value,option,rowObject){
+                    return rowObject.warehouseName+">"+rowObject.floorNum+"楼";
+                }
+            },
+            {label: '最大容量', name: 'maxContent', index: 'max_content', width: 80},
+			{label: '属于仓库的第几层楼', name: 'floorNum', index: 'floor_num', width: 80,hidden:true},
+            {label: '详细地址', name: 'addressDetail', index: 'address_detail', width: 80}
+        ]
     });
 });
 
@@ -46,6 +51,7 @@ let vm = new Vue({
 			vm.showList = false;
             vm.title = "修改";
 
+            vm.chooseWarehouse();
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
@@ -88,6 +94,8 @@ let vm = new Vue({
                 async: true,
                 successCallback: function (r) {
                     vm.room = r.room;
+                    // console.log(vm.room);
+                    vm.room.warehouseId=r.room.warehouseId+'';
                 }
             });
 		},
@@ -124,6 +132,7 @@ let vm = new Vue({
                     for(var item of r.list){
                         vm.warehouseList.push({value:item.id,label:item.name})
                     }
+                    console.log(vm.warehouseList);
                 }
             });
         },
