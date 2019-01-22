@@ -144,6 +144,7 @@ let vm = new Vue({
                 url: "../warehouse/info/"+vm.warehouseId,
                 async: true,
                 successCallback: function (r) {
+                    console.log(r);
                     vm.floorList=r.warehouse.floor;
 
                 }
